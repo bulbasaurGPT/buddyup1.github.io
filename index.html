@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuddyUp!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: linear-gradient(
+                to bottom,
+                violet,
+                indigo,
+                blue,
+                green,
+                yellow,
+                orange,
+                red
+            );
+            background-attachment: fixed;
+        }
+        .site-header {
+            background-color: rgba(74, 144, 226, 0.9);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .site-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        .site-name {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .chat-container {
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .chat-image-placeholder {
+            width: 100%;
+            height: 150px;
+            background-color: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #888;
+            font-style: italic;
+        }
+        .bot-name-container {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        #bot-name-input {
+            width: 70%;
+            padding: 5px;
+        }
+        #set-name-button {
+            padding: 5px 10px;
+        }
+        .chat-messages {
+            height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .chat-input {
+            display: flex;
+            padding: 10px;
+        }
+        #message-input {
+            flex-grow: 1;
+            margin-right: 10px;
+            padding: 5px;
+        }
+        #send-button {
+            padding: 5px 10px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <img src="/api/placeholder/40/40" alt="BuddyUp! Logo" class="site-logo">
+        <div class="site-name">BuddyUp!</div>
+    </header>
+    <main class="content">
+        <div class="chat-container">
+            <div class="chat-image-placeholder">
+                <img src="/api/placeholder/300/150" alt="Chat banner">
+            </div>
+            <div class="bot-name-container">
+                <input type="text" id="bot-name-input" placeholder="Enter Bot Name">
+                <button id="set-name-button">Set Name</button>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input">
+                <input type="text" id="message-input" placeholder="Type a message...">
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const botNameInput = document.getElementById('bot-name-input');
+        const setNameButton = document.getElementById('set-name-button');
+
+        let botName = 'BuddyBot';
+
+        function addMessage(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = `${sender}: ${message}`;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                addMessage('You', message);
+                messageInput.value = '';
+                // Simulate a response from the bot
+                setTimeout(() => {
+                    addMessage(botName, 'Thanks for your message, buddy!');
+                }, 1000);
+            }
+        }
+
+        function setBotName() {
+            const newName = botNameInput.value.trim();
+            if (newName) {
+                botName = newName;
+                botNameInput.value = '';
+                addMessage('System', `Bot name has been set to ${botName}`);
+            }
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        setNameButton.addEventListener('click', setBotName);
+        botNameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                setBotName();
+            }
+        });
+    </script>
+</body>
+</html>
